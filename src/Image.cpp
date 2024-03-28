@@ -2,13 +2,17 @@
 // Created by Marius Boroica on 22.03.2024.
 //
 
+#include <iostream>
 #include "Image.h"
 #include "ImageExceptions.h"
 
 Image::Image() {
+    m_data = NULL;
+    m_width = 0;
+    m_height = 0;
 }
 
-Image::Image(unsigned int w, unsigned int h): m_width(w), m_height(h) {
+Image::Image(unsigned int w, unsigned int h) : m_width(w), m_height(h) {
     m_data = new unsigned char *[h];
     for (int i = 0; i < h; ++i)
         m_data[i] = new unsigned char[w];
@@ -43,15 +47,16 @@ Image::~Image() {
 }
 
 bool Image::load(std::string imagePath) {
+    if (!isEmpty()) release();
+
     std::ifstream file(imagePath);
 
     std::string fileType;
-    std::string contentWidth, contentHeight;
+    unsigned int contentWidth, contentHeight;
     std::string description;
     int maxPixelValue;
 
     file >> fileType;
-    getline(file, description, '\n');
 
     if (fileType != "P2") {
         file.close();
@@ -60,6 +65,14 @@ bool Image::load(std::string imagePath) {
 
     file >> contentWidth >> contentHeight;
     file >> maxPixelValue;
+
+    m_width = contentWidth;
+    m_height = contentHeight;
+
+    m_data = new unsigned char *[m_height];
+    for (int i = 0; i < m_height; ++i)
+        m_data[i] = new unsigned char[m_width];
+
 
     int value;
     for (int i = 0; i < m_height; ++i)
@@ -70,22 +83,20 @@ bool Image::load(std::string imagePath) {
         }
 
     file.close();
+    return true;
 }
 
 bool Image::save(std::string imagePath) const {
-    if (isEmpty()) return false;
-
     std::ofstream file(imagePath);
 
     file << "P2\n";
-    file << "# Saved image\n";
+//    file << "# Saved image\n";
     file << m_width << ' ' << m_height << '\n';
     file << "255\n";
 
     for (int i = 0; i < m_height; ++i) {
-        for (int j = 0; j < m_width; ++j) {
-            file << m_data[i] << ' ';
-        }
+        for (int j = 0; j < m_width; ++j)
+            file << (int) m_data[i] << ' ';
         file << '\n';
     }
 
@@ -173,7 +184,7 @@ bool Image::getROI(Image &roiImg, unsigned int x, unsigned int y, unsigned int w
 }
 
 bool Image::isEmpty() const {
-    return !m_data && m_width == 0 && m_height == 0;
+    return m_data == NULL && m_width == 0 && m_height == 0;
 }
 
 Size Image::size() const {

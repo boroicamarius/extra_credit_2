@@ -7,9 +7,7 @@
 
 class ImageProcessing {
 public:
-    virtual ~ImageProcessing();
-
-    virtual void process(const Image &src, Image &dst);
+    virtual void process(const Image &src, Image &dst) {};
 };
 
 #endif //IMAGEPROCESSING_H

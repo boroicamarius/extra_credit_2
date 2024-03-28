@@ -42,10 +42,10 @@ void RectangleTests::test_Union() {
 }
 
 void RectangleTests::test_All() {
-    printf("Running: test_All\n");
+    printf("Running: RectangleTests::test_All\n");
 
     test_Intersection();
     test_Union();
 
-    printf("Ended: test_All\n");
+    printf("Ended: RectangleTests::test_All\n");
 }

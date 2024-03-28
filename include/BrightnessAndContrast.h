@@ -10,8 +10,6 @@
 
 class BrightnessAndConstrast : public ImageProcessing {
 public:
-    ~BrightnessAndConstrast() override = default;
-
     BrightnessAndConstrast(float alpha, float beta);
 
     void process(const Image &src, Image &dst) override;

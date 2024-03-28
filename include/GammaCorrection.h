@@ -10,8 +10,6 @@
 
 class GammaCorrection : public ImageProcessing {
 public:
-    ~GammaCorrection() override = default;
-
     explicit GammaCorrection(float gamma);
 
     void process(const Image &src, Image &dst) override;

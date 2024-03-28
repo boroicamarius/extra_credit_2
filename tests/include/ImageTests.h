@@ -11,9 +11,7 @@
 
 class ImageTests {
 public:
-    static void test_Load();
-
-    static void test_Save();
+    static void test_LoadAndSave(std::string imgLoadPath, std::string imgSavePath);
 
     static void test_All();
 };

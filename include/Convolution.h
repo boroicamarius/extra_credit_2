@@ -10,8 +10,6 @@
 
 class Convolution : public ImageProcessing {
 public:
-    ~Convolution() override = default;
-
     Convolution(unsigned int width, unsigned int height, unsigned char (*apply_kernel)(Point, const Image &));
 
     void process(const Image &src, Image &dst) override;

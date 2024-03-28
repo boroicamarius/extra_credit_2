@@ -3,7 +3,7 @@
 //
 
 #include "ImageTests.h"
-#include "tests/include/RectangleTests.h"
+#include "RectangleTests.h"
 
 int main() {
     RectangleTests::test_All();

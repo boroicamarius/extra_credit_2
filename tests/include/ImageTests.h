@@ -9,7 +9,8 @@
 #include <assert.h>
 #include <cstdio>
 
-class ImageTests {
+
+class ImageTests  {
 public:
     static void test_LoadAndSave(std::string imgLoadPath, std::string imgSavePath);
 

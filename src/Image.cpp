@@ -4,6 +4,9 @@
 
 #include <iostream>
 #include "Image.h"
+
+#include <sstream>
+
 #include "ImageExceptions.h"
 
 Image::Image() {
@@ -19,13 +22,16 @@ Image::Image(unsigned int w, unsigned int h) : m_width(w), m_height(h) {
 }
 
 Image::Image(const Image &other) {
-    m_width = other.width();
-    m_height = other.height();
+    m_width = other.m_width;
+    m_height = other.m_height;
 
     m_data = new unsigned char *[m_height];
-    for (int i = 0; i < m_height; ++i)
-        for (int j = 0; j < m_width; ++j)
+    for (int i = 0; i < m_height; ++i) {
+        m_data[i] = new unsigned char [m_width];
+        for (int j = 0; j < m_width; ++j) {
             m_data[i][j] = other.m_data[i][j];
+        }
+    }
 }
 
 Image &Image::operator=(const Image &other) {
@@ -37,8 +43,12 @@ Image &Image::operator=(const Image &other) {
     m_width = other.width();
     m_height = other.height();
     m_data = new unsigned char *[m_height];
-    for (int i = 0; i < m_height; ++i)
+    for (int i = 0; i < m_height; ++i) {
         m_data[i] = new unsigned char[m_width];
+        for (int j = 0; j < m_width; ++j) {
+            m_data[i][j] = other.m_data[i][j];
+        }
+    }
     return *this;
 }
 
@@ -52,7 +62,7 @@ bool Image::load(std::string imagePath) {
     std::ifstream file(imagePath);
 
     std::string fileType;
-    unsigned int contentWidth, contentHeight;
+    int contentWidth = 0, contentHeight = 0;
     std::string description;
     int maxPixelValue;
 
@@ -64,7 +74,15 @@ bool Image::load(std::string imagePath) {
     }
 
     file >> contentWidth >> contentHeight;
-    file >> maxPixelValue;
+    file.ignore();
+
+    std::getline(file, description);
+    if (description.size() > 0 && description[0] != '#') {
+        std::stringstream stream(description);
+        stream >> maxPixelValue;
+    } else {
+        file >> maxPixelValue;
+    }
 
     m_width = contentWidth;
     m_height = contentHeight;
@@ -73,13 +91,11 @@ bool Image::load(std::string imagePath) {
     for (int i = 0; i < m_height; ++i)
         m_data[i] = new unsigned char[m_width];
 
-
     int value;
     for (int i = 0; i < m_height; ++i)
         for (int j = 0; j < m_width; ++j) {
             file >> value;
-            value %= maxPixelValue + 1;
-            m_data[i][j] = value;
+            m_data[i][j] = value % 256;
         }
 
     file.close();
@@ -90,17 +106,18 @@ bool Image::save(std::string imagePath) const {
     std::ofstream file(imagePath);
 
     file << "P2\n";
-//    file << "# Saved image\n";
-    file << m_width << ' ' << m_height << '\n';
+    file << (int) m_width << ' ' << (int) m_height << '\n';
+    file << "# Saved image\n";
     file << "255\n";
 
     for (int i = 0; i < m_height; ++i) {
         for (int j = 0; j < m_width; ++j)
-            file << (int) m_data[i] << ' ';
+            file << (int) m_data[i][j] << ' ';
         file << '\n';
     }
 
     file.close();
+    return true;
 }
 
 Image Image::operator+(const Image &i) {
@@ -204,6 +221,10 @@ unsigned char &Image::at(unsigned int x, unsigned int y) {
 }
 
 unsigned char &Image::at(Point pt) {
+    return m_data[pt.getY()][pt.getX()];
+}
+
+unsigned char Image::get(Point pt) const {
     return m_data[pt.getY()][pt.getX()];
 }
 

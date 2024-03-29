@@ -10,9 +10,10 @@ Convolution::Convolution(unsigned int width, unsigned int height,
 }
 
 void Convolution::process(const Image &src, Image &dst) {
-    dst = Image::zeros(width, height);
+    dst = Image::zeros(src.width() - width + 1, src.height() - height + 1);
     for (int y = 0; y < src.height() - height + 1; ++y) {
         for (int x = 0; x < src.width() - width + 1; ++x) {
+            printf("%d %d\n",x,y);
             dst.at(x, y) = apply_kernel(Point(x, y), src);
         }
     }

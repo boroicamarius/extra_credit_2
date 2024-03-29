@@ -8,9 +8,12 @@ BrightnessAndConstrast::BrightnessAndConstrast(float alpha, float beta): alpha(a
 }
 
 void BrightnessAndConstrast::process(const Image &src, Image &dst) {
+    Image x = Image(src);
+    Image y = Image::ones(src.width(), src.height());
+
     if (beta < 0) {
-        dst = Image(src) * alpha - Image::ones(src.width(), src.height()) * (beta * -1);
+        dst = x * alpha - y * (beta * -1);
         return;
     }
-    dst = Image(src) * alpha + Image::ones(src.width(), src.height()) * beta;
+    dst = x * alpha + y * beta;
 }

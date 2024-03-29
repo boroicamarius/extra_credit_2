@@ -16,18 +16,17 @@ void ImageTests::test_LoadAndSave(std::string imgLoadPath, std::string imgSavePa
     assert(img.height() == 600);
 
     assert(img.save(imgSavePath) == true);
+    printf("\t\tLoading image\n");
     img.load(imgSavePath);
-
-
 
     printf("\tEnded: test_LoadAndSave\n");
 }
 
 void ImageTests::test_All() {
     printf("Running: ImageTests::test_All\n");
-    test_LoadAndSave(
-            "/home/boroicamarius/Development/extra_credit_2/tests/resources/apollonian_gasket.ascii.pgm",
-            "/home/boroicamarius/Development/extra_credit_2/tests/resources/saved_apollonian_gasket.ascii.pgm"
+    std::string FILES_DIR = "/Users/boroicamarius/Development/ubblab/extra_credit_2/tests/resources/";
+    test_LoadAndSave(FILES_DIR + "apollonian_gasket.ascii.pgm",
+                     FILES_DIR + "saved_apollonian_gasket.ascii.pgm"
     );
     printf("Running: ImageTests::test_All\n");
 }

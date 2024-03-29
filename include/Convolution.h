@@ -10,15 +10,14 @@
 
 class Convolution : public ImageProcessing {
 public:
-    Convolution(unsigned int width, unsigned int height, unsigned char (*apply_kernel)(Point, const Image &));
-
+    Convolution(unsigned int width, unsigned int height, unsigned char (*apply_kernel)(Point,const Image &));
     void process(const Image &src, Image &dst) override;
 
 private:
     unsigned int width;
     unsigned int height;
 
-    unsigned char (*apply_kernel)(Point, const Image &);
+    unsigned char (*apply_kernel)(Point,const Image &);
 };
 
 

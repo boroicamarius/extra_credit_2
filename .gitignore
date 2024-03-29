@@ -43,6 +43,9 @@
 # CMake
 cmake-build-*/
 
+#PGM
+**/*.pgm
+
 # Mongo Explorer plugin
 .idea/**/mongoSettings.xml
 

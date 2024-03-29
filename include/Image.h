@@ -48,6 +48,8 @@ public:
 
     unsigned char &at(Point pt);
 
+    unsigned char get(Point pt) const;
+
     unsigned char *row(int y);
 
     void release();
